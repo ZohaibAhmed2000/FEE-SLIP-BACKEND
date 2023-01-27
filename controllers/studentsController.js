@@ -19,7 +19,7 @@ exports.getstudent = async (req, res) => {
     try {
         const student = await studentModel.findOne({ roll_number: req.body.roll_number });
         if (!student) {
-            res.json({
+            res.status(400).json({
                 message: "No Student Found with provided Roll Number"
             })
         }
@@ -28,7 +28,6 @@ exports.getstudent = async (req, res) => {
         }
     } catch (error) {
         console.log(error)
-
     }
 }
 
@@ -80,8 +79,8 @@ exports.addstudent = async (req, res) => {
     console.log(objToSend)
     studentModel.create(objToSend, (err, student) => {
         if (err) {
-            res.json({
-                message: err.message,
+            res.status(400).json({
+                message: "Roll No Same",
             })
         }
         else {
@@ -125,7 +124,7 @@ exports.updatestudent = async (req, res) => {
             student.email = req.body.email,
             student.parent_contact = req.body.parent_contact,
 
-        student.save()
+        await student.save()
         res.json({
             message: "Student Updated Successfully!",
             student
